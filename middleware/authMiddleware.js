@@ -1,6 +1,4 @@
-import { auth } from '../config/firebase-admin.js';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../config/firebase-admin.js';
+import { auth, db } from '../config/firebase-admin.js';
 
 export const authenticateUser = async (req, res, next) => {
     try {
@@ -15,9 +13,9 @@ export const authenticateUser = async (req, res, next) => {
         const token = authHeader.split('Bearer ')[1];
         const decodedToken = await auth.verifyIdToken(token);
         
-        // Get user role from Firestore
-        const userDoc = await getDoc(doc(db, 'users', decodedToken.uid));
-        if (!userDoc.exists()) {
+        // Get user role from Firestore using Admin SDK
+        const userDoc = await db.collection('users').doc(decodedToken.uid).get();
+        if (!userDoc.exists) {
             return res.status(401).json({
                 success: false,
                 message: 'User not found'
@@ -40,4 +38,4 @@ export const authenticateUser = async (req, res, next) => {
             message: 'Invalid token'
         });
     }
-}; 
+};

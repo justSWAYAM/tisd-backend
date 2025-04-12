@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import authRoutes from './routes/auth.js';
+// import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js';
+import userRoutes from './routes/userRoutes.js';
+
 
 dotenv.config();
 
@@ -30,8 +32,9 @@ app.use((err, req, res, next) => {
 });
 
 // Routes
-app.use('/api/auth', authRoutes);
+// app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/users', userRoutes);
 
 // Base route
 app.get("/", (req, res) => {
